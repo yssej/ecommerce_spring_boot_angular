@@ -13,4 +13,4 @@ spring:
     hibernate:
       ddl-auto: update
 stripe:
-  secret-key: ${SPRING_DATASOURCE_USERNAME:secret_key}
+  secret-key: ${STRIPE_SECRET_KEY}
