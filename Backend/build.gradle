@@ -32,6 +32,7 @@ dependencies {
     implementation 'org.springframework.security:spring-security-oauth2-jose'
     implementation 'org.springframework.security:spring-security-oauth2-resource-server'
     implementation 'org.mapstruct:mapstruct:1.5.5.Final'
+    implementation 'com.stripe:stripe-java:23.2.0'
     testImplementation 'org.springframework.security:spring-security-test'
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
