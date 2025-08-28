@@ -5,6 +5,7 @@ Backend/build/
 !Backend/**/src/main/**/build/
 !Backend/**/src/test/**/build/
 .idea
+Backend/.env
 
 ### STS ###
 .apt_generated
