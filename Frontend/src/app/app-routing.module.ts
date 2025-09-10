@@ -1,8 +1,19 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { HomeComponent } from './home/home.component';
+import { LoginComponent } from './auth/login/login.component';
+import { RegisterComponent } from './auth/register/register.component';
+import { ProductComponent } from './product/product.component';
+import { PaymentComponent } from './payment/payment.component'
+import { OrderComponent } from './order/order.component';
 
 const routes: Routes = [
-
+  { path: '', component: HomeComponent },
+  { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent },
+  { path: 'product/:id', component: ProductComponent },
+  { path: 'payment', component: PaymentComponent },
+  { path: 'order', component: OrderComponent }
 ];
 
 @NgModule({
