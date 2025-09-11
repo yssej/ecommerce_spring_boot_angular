@@ -6,11 +6,13 @@ import { RegisterComponent } from './auth/register/register.component';
 import { ProductComponent } from './product/product.component';
 import { PaymentComponent } from './payment/payment.component'
 import { OrderComponent } from './order/order.component';
+import {CheckoutComponent} from "./checkout/checkout.component";
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
+  { path: 'checkout', component: CheckoutComponent },
   { path: 'product/:id', component: ProductComponent },
   { path: 'payment', component: PaymentComponent },
   { path: 'order', component: OrderComponent }
