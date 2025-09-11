@@ -7,6 +7,7 @@ import { ProductComponent } from './product/product.component';
 import { PaymentComponent } from './payment/payment.component'
 import { OrderComponent } from './order/order.component';
 import {CheckoutComponent} from "./checkout/checkout.component";
+import {UserComponent} from "./user/user.component";
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -14,6 +15,7 @@ const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'checkout', component: CheckoutComponent },
   { path: 'product/:id', component: ProductComponent },
+  { path: 'user', component: UserComponent },
   { path: 'payment', component: PaymentComponent },
   { path: 'order', component: OrderComponent }
 ];
