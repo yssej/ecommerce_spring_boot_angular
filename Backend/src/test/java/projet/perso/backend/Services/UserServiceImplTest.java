@@ -58,4 +58,17 @@ public class UserServiceImplTest {
         assertNotNull(result);
         assertEquals("test@mail.com", result.getEmail());
     }
+
+    @Test
+    void loadUserByUsername_shouldThrowException_whenNotExists() {
+        when(userRepository.findByEmail("unknown@mail.com"))
+                .thenReturn(Optional.empty());
+
+        AppException exception = assertThrows(
+                AppException.class,
+                () -> userService.loadUserByUsername("unknown@mail.com")
+        );
+
+        assertEquals(HttpStatus.NOT_FOUND, exception.getHttpStatus());
+    }
 }
