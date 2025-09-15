@@ -71,4 +71,30 @@ public class UserServiceImplTest {
 
         assertEquals(HttpStatus.NOT_FOUND, exception.getHttpStatus());
     }
+
+    @Test
+    void getUserById_shouldReturnUser_whenExistsAndAuthorized() {
+
+        // GIVEN
+
+        User user = new User();
+        user.setId(1L);
+        user.setEmail("test@mail.com");
+
+        when(userRepository.findById(1L))
+                .thenReturn(Optional.of(user));
+        when(authentication.getName())
+                .thenReturn("test@mail.com");
+
+        // WHEN
+
+        User result = userService.getUserById(1L, authentication);
+
+        // THEN
+        assertNotNull(result);
+        assertEquals(1L, result.getId());
+        assertEquals("test@mail.com", result.getEmail());
+        assertEquals(user, result);
+
+    }
 }
