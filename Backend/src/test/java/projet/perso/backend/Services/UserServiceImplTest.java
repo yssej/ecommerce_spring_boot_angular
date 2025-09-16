@@ -97,4 +97,18 @@ public class UserServiceImplTest {
         assertEquals(user, result);
 
     }
+
+    @Test
+    void getUserById_shouldThrowException_whenNotExists() {
+
+        when(userRepository.findById(1L))
+                .thenReturn(Optional.empty());
+
+        AppException exception = assertThrows(
+            AppException.class, 
+            () -> userService.getUserById(1L, authentication)
+        );
+
+        assertEquals(HttpStatus.NOT_FOUND, exception.getHttpStatus());
+    }
 }
