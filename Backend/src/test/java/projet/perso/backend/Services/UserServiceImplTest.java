@@ -134,4 +134,32 @@ public class UserServiceImplTest {
 
         assertEquals(HttpStatus.BAD_REQUEST, exception.getHttpStatus());
     }
+
+    @Test
+    void shouldUpdateEmailAndPassword_whenUserExistsAndAuthorized() {
+
+        User user = new User();
+        user.setId(1L);
+        user.setEmail("test@mail.com");
+        user.setPassword("oldHashedPassword");
+
+        when(userRepository.findById(1L))
+                .thenReturn(Optional.of(user));
+        when(authentication.getName())
+                .thenReturn("test@mail.com");
+        when(passwordEncoder.encode("newPassword"))
+                .thenReturn("newHashedPassword");
+        // WHEN
+        UserDTO userDTO = new UserDTO();
+        userDTO.setEmail("newMail@mail.com");
+        userDTO.setPassword("newPassword");
+        User result = userService.updateUserById(1L, userDTO, authentication);
+        // THEN
+        assertNotNull(result);
+        assertEquals(1L, result.getId());
+        assertEquals("newMail@mail.com", result.getEmail());
+        assertEquals("newHashedPassword", result.getPassword());
+        verify(userRepository).save(user);
+
+    }
 }
