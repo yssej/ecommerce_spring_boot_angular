@@ -111,4 +111,27 @@ public class UserServiceImplTest {
 
         assertEquals(HttpStatus.NOT_FOUND, exception.getHttpStatus());
     }
+
+    @Test
+    void getUserById_shouldThrowException_whenNotAuthorized() {
+
+        // GIVEN
+
+        User user = new User();
+        user.setId(1L);
+        user.setEmail("test@mail.com");
+
+        when(userRepository.findById(1L))
+                .thenReturn(Optional.of(user));
+        when(authentication.getName())
+            .thenReturn("other@mail.com");
+
+        // WHEN: request the same user's id but with a different authenticated email
+        AppException exception = assertThrows(
+            AppException.class,
+            () -> userService.getUserById(1L, authentication)
+        );
+
+        assertEquals(HttpStatus.BAD_REQUEST, exception.getHttpStatus());
+    }
 }
