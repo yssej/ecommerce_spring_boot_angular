@@ -184,4 +184,21 @@ public class UserServiceImplTest {
         assertEquals("hashedPass", updated.getPassword()); 
         verify(userRepository).save(user); 
     }
+
+    @Test
+    void updateUserById_shouldThrowException_whenUserNotFound() {
+
+        when(userRepository.findById(1L))
+                .thenReturn(Optional.empty());
+
+        UserDTO userDTO = new UserDTO();
+        userDTO.setEmail("test@mail.com");
+        userDTO.setPassword("newPassword");
+        AppException exception = assertThrows(
+            AppException.class,
+            () -> userService.updateUserById(1L, userDTO, authentication)
+        );
+        assertEquals(HttpStatus.NOT_FOUND, exception.getHttpStatus());
+
+    }
 }
