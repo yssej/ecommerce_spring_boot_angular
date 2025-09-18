@@ -162,4 +162,26 @@ public class UserServiceImplTest {
         verify(userRepository).save(user);
 
     }
+
+    @Test 
+    void updateUserById_shouldUpdateEmailAndPassword_whenValid() { 
+        User user = new User(); 
+        user.setId(1L); 
+        user.setEmail("old@mail.com"); 
+        user.setPassword("oldPass"); 
+        
+        UserDTO dto = new UserDTO(); 
+        dto.setEmail("new@mail.com"); 
+        dto.setPassword("newPass"); 
+        
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user)); 
+        when(authentication.getName()).thenReturn("old@mail.com"); 
+        when(passwordEncoder.encode("newPass")).thenReturn("hashedPass");
+
+        User updated = userService.updateUserById(1L, dto, authentication); 
+        
+        assertEquals("new@mail.com", updated.getEmail()); 
+        assertEquals("hashedPass", updated.getPassword()); 
+        verify(userRepository).save(user); 
+    }
 }
