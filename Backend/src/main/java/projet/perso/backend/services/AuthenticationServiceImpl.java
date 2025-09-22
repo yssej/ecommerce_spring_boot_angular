@@ -1,6 +1,7 @@
 package projet.perso.backend.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -9,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import projet.perso.backend.DTOs.UserLoginDTO;
+import projet.perso.backend.Exception.AppException;
 import projet.perso.backend.entities.User;
 import projet.perso.backend.entities.UserRole;
 import projet.perso.backend.repositories.UserRepository;
@@ -37,9 +39,17 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private TokenService tokenService;
 
     public User register(String email, String password) {
+
+        if(userRepository.findByEmail(email).isPresent()){
+            throw new AppException("Email address already in use!", HttpStatus.BAD_REQUEST);
+        }
+
         String encodedPassword = passwordEncoder.encode(password);
 
-        UserRole userRole = userRoleRepository.findByAuthority("USER").get();
+        UserRole userRole = userRoleRepository.findByAuthority("USER")
+                .orElseThrow(() ->
+                        new AppException("Role USER not found", HttpStatus.NOT_FOUND)
+                );
         Set<UserRole> authorities = new HashSet<>();
 
         authorities.add(userRole);
