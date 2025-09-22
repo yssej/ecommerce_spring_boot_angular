@@ -83,4 +83,19 @@ public class AuthenticationServiceImplTest {
         assertTrue(capturedUser.getAuthorities().contains(userRole));
     }
 
+    @Test
+    void register_shouldThrowException_whenUserRoleNotFound() {
+        // GIVEN
+        when(userRoleRepository.findByAuthority("USER"))
+                .thenReturn(Optional.empty()); // Le rôle USER n'existe pas
+
+        // WHEN + THEN
+        assertThrows(NoSuchElementException.class, () -> {
+            authenticationService.register("test@mail.com", "pass123");
+        });
+
+        verify(userRoleRepository).findByAuthority("USER");
+        verify(userRepository, never()).save(any());
+    }
+
 }
