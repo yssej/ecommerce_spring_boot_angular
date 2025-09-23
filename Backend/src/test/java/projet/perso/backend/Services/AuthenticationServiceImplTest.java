@@ -98,4 +98,27 @@ public class AuthenticationServiceImplTest {
         verify(userRepository, never()).save(any());
     }
 
+    @Test
+    void register_shouldThrowException_whenEmailAlreadyExist() {
+        // GIVEN
+        String email = "test@mail.com";
+        String password = "password123";
+
+        // Le repository retourne un User → donc email existe
+        when(userRepository.findByEmail(email))
+                .thenReturn(Optional.of(new User()));
+
+        // WHEN + THEN
+        AppException exception = assertThrows(
+                AppException.class,
+                () -> authenticationService.register(email, password)
+        );
+
+        assertEquals("Email address already in use!", exception.getMessage());
+        assertEquals(HttpStatus.BAD_REQUEST, exception.getHttpStatus());
+
+        // On s’assure que save() n’a PAS été appelé
+        verify(userRepository, never()).save(any());
+    }
+
 }
