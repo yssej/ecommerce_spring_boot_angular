@@ -121,4 +121,33 @@ public class AuthenticationServiceImplTest {
         verify(userRepository, never()).save(any());
     }
 
+    @Test
+    void login_shouldReturnUserLogiDTO_whenCredentialsAreValid() {
+        // GIVEN
+        String email = "test@mail.com";
+        String password = "password";
+
+        User user = new User();
+        user.setId(1L);
+        user.setEmail(email);
+
+        Authentication authentication = mock(Authentication.class);
+
+        when(authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(email, password)))
+                .thenReturn(authentication);
+        when(tokenService.generateJwt(authentication))
+                .thenReturn("jwtToken");
+        when(userRepository.findByEmail(email))
+                .thenReturn(Optional.of(user));
+
+
+        UserLoginDTO result = authenticationService.login(email, password);
+
+        assertNotNull(result);
+        assertEquals(1L, result.getId());
+        assertEquals(user, result.getUser());
+        assertEquals("jwtToken", result.getJwt());
+    }
+
 }
