@@ -170,4 +170,30 @@ public class AuthenticationServiceImplTest {
         assertEquals("", result.getJwt());
     }
 
+    @Test
+    void login_shouldReturnEmptyDTO_whenUserNotFound() {
+        // GIVEN
+        String email = "wrong@mail.com";
+        String password = "badPassword";
+
+        Authentication auth = mock(Authentication.class);
+
+        when(authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(email, password)
+        )).thenReturn(auth);
+        when(userRepository.findByEmail(email))
+                .thenReturn(Optional.empty());
+        when(tokenService.generateJwt(auth))
+                .thenReturn("jwtToken123");
+
+        // WHEN
+        UserLoginDTO result = authenticationService.login(email, password);
+
+        // THEN
+        assertNotNull(result);
+        assertNull(result.getId());
+        assertNull(result.getUser());
+        assertEquals("", result.getJwt());
+    }
+
 }
