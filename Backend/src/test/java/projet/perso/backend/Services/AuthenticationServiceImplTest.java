@@ -150,4 +150,24 @@ public class AuthenticationServiceImplTest {
         assertEquals("jwtToken", result.getJwt());
     }
 
+    @Test
+    void login_shouldReturnEmptyDTO_whenAuthenticationFails() {
+        // GIVEN
+        String email = "wrong@mail.com";
+        String password = "badPassword";
+
+        when(authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(email, password)
+        )).thenThrow(new AuthenticationException("Invalid credentials") {});
+
+        // WHEN
+        UserLoginDTO result = authenticationService.login(email, password);
+
+        // THEN
+        assertNotNull(result);
+        assertNull(result.getId());
+        assertNull(result.getUser());
+        assertEquals("", result.getJwt());
+    }
+
 }
